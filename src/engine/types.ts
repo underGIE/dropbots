@@ -15,11 +15,24 @@ export interface Tuning {
   hypeDown: number;
 }
 
+export interface Skin {
+  bg: string;
+  box: string;
+  box2: string;
+  ink: string;
+  dim: string;
+  ok: string;
+  bad: string;
+  hot: string;
+}
+
 export interface ThemePack {
   slug: string;
   title: string;
   subtitle: string;
   intro: { names: string[] };
+  /** colours live in the pack, not in the stylesheet */
+  theme?: Skin;
   controls: ControlDef[];
   instructionTemplates: string[];
   tuning: Tuning;

@@ -1,8 +1,15 @@
 {
   "slug": "demo-family",
-  "title": "TWO DJS",
+  "title": "DROPBOTS",
   "subtitle": "הקהל מחכה. תצעקו אחד על השני.",
-  "intro": { "names": ["אבי", "שני", "דודו", "מיכל"] },
+  "intro": {
+    "names": [
+      "אבי",
+      "שני",
+      "דודו",
+      "מיכל"
+    ]
+  },
   "tuning": {
     "targetScore": 25,
     "startHype": 55,
@@ -19,37 +26,175 @@
     "הקהל רוצה {label}"
   ],
   "controls": [
-    { "id": "c01", "label": "תוריד את הבס", "kind": "fader" },
-    { "id": "c02", "label": "טיפקס", "kind": "pad" },
-    { "id": "c03", "label": "סבתא על הרמקול", "kind": "fx" },
-    { "id": "c04", "label": "אקו על הסנר", "kind": "fx" },
-    { "id": "c05", "label": "שופר", "kind": "pad" },
-    { "id": "c06", "label": "צופר חתונה", "kind": "pad" },
-    { "id": "c07", "label": "תרים את הפילטר", "kind": "knob" },
-    { "id": "c08", "label": "דרבוקה", "kind": "pad" },
-    { "id": "c09", "label": "מחיאות כפיים", "kind": "pad" },
-    { "id": "c10", "label": "סירנה", "kind": "fx" },
-    { "id": "c11", "label": "תשתיק את הווקאל", "kind": "fader" },
-    { "id": "c12", "label": "ריברב ענק", "kind": "knob" },
-    { "id": "c13", "label": "בום של חצות", "kind": "pad" },
-    { "id": "c14", "label": "קול של הדוד", "kind": "fx" },
-    { "id": "c15", "label": "סקראצ'", "kind": "knob" },
-    { "id": "c16", "label": "תאט את הקצב", "kind": "knob" },
-    { "id": "c17", "label": "תאיץ את הקצב", "kind": "knob" },
-    { "id": "c18", "label": "קלאפ של פסח", "kind": "pad" },
-    { "id": "c19", "label": "חליל של חג", "kind": "fx" },
-    { "id": "c20", "label": "בס דאב", "kind": "fader" },
-    { "id": "c21", "label": "צעקה של הקהל", "kind": "pad" },
-    { "id": "c22", "label": "זמזום פלאפון", "kind": "fx" },
-    { "id": "c23", "label": "שריקה", "kind": "pad" },
-    { "id": "c24", "label": "תן לופ", "kind": "pad" },
-    { "id": "c25", "label": "הרמוניה של המשפחה", "kind": "fx" },
-    { "id": "c26", "label": "תוריד הכל", "kind": "fader" },
-    { "id": "c27", "label": "פתח את הדלת", "kind": "fx" },
-    { "id": "c28", "label": "קצב של האוטו", "kind": "pad" },
-    { "id": "c29", "label": "רמקול ימין", "kind": "fader" },
-    { "id": "c30", "label": "רמקול שמאל", "kind": "fader" },
-    { "id": "c31", "label": "תוסיף מלח", "kind": "knob" },
-    { "id": "c32", "label": "דאבל דרופ", "kind": "pad" }
-  ]
+    {
+      "id": "c01",
+      "label": "תוריד את הבס",
+      "kind": "fader"
+    },
+    {
+      "id": "c02",
+      "label": "טיפקס",
+      "kind": "pad"
+    },
+    {
+      "id": "c03",
+      "label": "סבתא על הרמקול",
+      "kind": "fx"
+    },
+    {
+      "id": "c04",
+      "label": "אקו על הסנר",
+      "kind": "fx"
+    },
+    {
+      "id": "c05",
+      "label": "שופר",
+      "kind": "pad"
+    },
+    {
+      "id": "c06",
+      "label": "צופר חתונה",
+      "kind": "pad"
+    },
+    {
+      "id": "c07",
+      "label": "תרים את הפילטר",
+      "kind": "knob"
+    },
+    {
+      "id": "c08",
+      "label": "דרבוקה",
+      "kind": "pad"
+    },
+    {
+      "id": "c09",
+      "label": "מחיאות כפיים",
+      "kind": "pad"
+    },
+    {
+      "id": "c10",
+      "label": "סירנה",
+      "kind": "fx"
+    },
+    {
+      "id": "c11",
+      "label": "תשתיק את הווקאל",
+      "kind": "fader"
+    },
+    {
+      "id": "c12",
+      "label": "ריברב ענק",
+      "kind": "knob"
+    },
+    {
+      "id": "c13",
+      "label": "בום של חצות",
+      "kind": "pad"
+    },
+    {
+      "id": "c14",
+      "label": "קול של הדוד",
+      "kind": "fx"
+    },
+    {
+      "id": "c15",
+      "label": "סקראצ'",
+      "kind": "knob"
+    },
+    {
+      "id": "c16",
+      "label": "תאט את הקצב",
+      "kind": "knob"
+    },
+    {
+      "id": "c17",
+      "label": "תאיץ את הקצב",
+      "kind": "knob"
+    },
+    {
+      "id": "c18",
+      "label": "קלאפ של פסח",
+      "kind": "pad"
+    },
+    {
+      "id": "c19",
+      "label": "חליל של חג",
+      "kind": "fx"
+    },
+    {
+      "id": "c20",
+      "label": "בס דאב",
+      "kind": "fader"
+    },
+    {
+      "id": "c21",
+      "label": "צעקה של הקהל",
+      "kind": "pad"
+    },
+    {
+      "id": "c22",
+      "label": "זמזום פלאפון",
+      "kind": "fx"
+    },
+    {
+      "id": "c23",
+      "label": "שריקה",
+      "kind": "pad"
+    },
+    {
+      "id": "c24",
+      "label": "תן לופ",
+      "kind": "pad"
+    },
+    {
+      "id": "c25",
+      "label": "הרמוניה של המשפחה",
+      "kind": "fx"
+    },
+    {
+      "id": "c26",
+      "label": "תוריד הכל",
+      "kind": "fader"
+    },
+    {
+      "id": "c27",
+      "label": "פתח את הדלת",
+      "kind": "fx"
+    },
+    {
+      "id": "c28",
+      "label": "קצב של האוטו",
+      "kind": "pad"
+    },
+    {
+      "id": "c29",
+      "label": "רמקול ימין",
+      "kind": "fader"
+    },
+    {
+      "id": "c30",
+      "label": "רמקול שמאל",
+      "kind": "fader"
+    },
+    {
+      "id": "c31",
+      "label": "תוסיף מלח",
+      "kind": "knob"
+    },
+    {
+      "id": "c32",
+      "label": "דאבל דרופ",
+      "kind": "pad"
+    }
+  ],
+  "theme": {
+    "bg": "#131416",
+    "box": "#23262b",
+    "box2": "#2e3238",
+    "ink": "#f2f3f5",
+    "dim": "#9aa0a8",
+    "ok": "#4caf7d",
+    "bad": "#c9544f",
+    "hot": "#e8b23a"
+  }
 }

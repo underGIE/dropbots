@@ -1,4 +1,5 @@
-import pack from '../packs/demo-family.json';
+import demoPack from '../packs/demo-family.json';
+import technoPack from '../packs/techno-club.json';
 import { deadlineMs } from './engine/match';
 import type { ThemePack } from './engine/types';
 import { Room } from './net/room';
@@ -6,7 +7,20 @@ import { broadcastTransport } from './transport/broadcast';
 import { clientFromEnv, supabaseTransport, type RealtimeLike } from './transport/supabase';
 import type { Transport } from './transport/types';
 
-const PACK = pack as ThemePack;
+const PACKS: Record<string, ThemePack> = {
+  'demo-family': demoPack as ThemePack,
+  'techno-club': technoPack as ThemePack,
+};
+
+const wanted = new URLSearchParams(location.search).get('pack') ?? 'demo-family';
+const PACK = PACKS[wanted] ?? (demoPack as ThemePack);
+
+// the skin is content: swapping a pack re-themes the whole screen, no code
+if (PACK.theme) {
+  for (const [token, value] of Object.entries(PACK.theme)) {
+    document.documentElement.style.setProperty(`--${token === 'box2' ? 'box-2' : token}`, value);
+  }
+}
 const app = document.getElementById('app')!;
 
 // With Supabase keys the room spans real phones; without them it still plays
