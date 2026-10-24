@@ -3,6 +3,7 @@ import type { MatchState, ThemePack } from '../engine/types';
 import type { GameMsg, Transport } from '../transport/types';
 
 export const TICK_MS = 100;
+export const HEARTBEAT_MS = 1000;
 
 export interface Seat {
   id: string;
@@ -26,6 +27,8 @@ export class Room {
   private readonly pack: ThemePack;
   private timer: ReturnType<typeof setInterval> | null = null;
   private readonly now: () => number;
+  private lastSignature = '';
+  private lastPublish = 0;
 
   constructor(opts: {
     transport: Transport;
@@ -165,9 +168,31 @@ export class Room {
     this.publish();
   }
 
+  /**
+   * Snapshots go out when something actually changed, plus a slow heartbeat for
+   * a phone that joined late. Shipping 10 identical snapshots a second over a
+   * realtime channel is just money.
+   */
   private publish(): void {
     if (this.state && this.hostId) {
-      this.transport.send({ t: 'state', hostId: this.hostId, state: this.state });
+      const s = this.state;
+      const signature = [
+        s.phase,
+        s.score,
+        s.hype,
+        s.dropsFired,
+        s.inDrop,
+        s.players.join(','),
+        Object.values(s.instructions)
+          .map((i) => `${i.reader}:${i.controlId}:${i.deadlineAt}`)
+          .join('|'),
+      ].join('~');
+      const at = this.now();
+      if (signature !== this.lastSignature || at - this.lastPublish >= HEARTBEAT_MS) {
+        this.lastSignature = signature;
+        this.lastPublish = at;
+        this.transport.send({ t: 'state', hostId: this.hostId, state: s });
+      }
     }
     this.onChange?.();
   }

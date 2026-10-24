@@ -3,9 +3,22 @@ import { deadlineMs } from './engine/match';
 import type { ThemePack } from './engine/types';
 import { Room } from './net/room';
 import { broadcastTransport } from './transport/broadcast';
+import { clientFromEnv, supabaseTransport, type RealtimeLike } from './transport/supabase';
+import type { Transport } from './transport/types';
 
 const PACK = pack as ThemePack;
 const app = document.getElementById('app')!;
+
+// With Supabase keys the room spans real phones; without them it still plays
+// across two tabs of one browser, so the game never depends on a backend.
+const realtime = clientFromEnv(import.meta.env as unknown as Record<string, string | undefined>);
+const online = realtime !== null;
+
+function makeTransport(code: string): Transport {
+  return online
+    ? supabaseTransport(code, realtime as unknown as RealtimeLike)
+    : broadcastTransport(code);
+}
 
 let room: Room | null = null;
 let draftName = '';
@@ -18,7 +31,7 @@ const roomCode = () => Math.random().toString(36).slice(2, 6).toUpperCase();
 function enter(code: string, isHost: boolean, solo = false): void {
   const name = draftName.trim() || 'DJ';
   room = new Room({
-    transport: broadcastTransport(solo ? `solo-${id()}` : code),
+    transport: makeTransport(solo ? `solo-${id()}` : code),
     pack: PACK,
     me: { id: id(), name },
     isHost,
@@ -48,8 +61,11 @@ function home(): string {
     <div class="card">
       <button id="solo">תרגול לבד</button>
     </div>
-    <div class="sub">שני טלפונים? פתח חדר כאן, והשני מצטרף עם הקוד.
-    בגרסה הזו שני הצדדים חייבים להיות באותו דפדפן (שתי לשוניות) — חיבור בין טלפונים נפרדים מגיע עם Supabase.</div>
+    <div class="sub">${
+      online
+        ? 'מחובר לשרת: פתח חדר כאן, ושלח את הלינק לטלפון השני.'
+        : 'מצב מקומי: שני הצדדים חייבים להיות באותו דפדפן (שתי לשוניות). הוסף מפתחות Supabase ב-.env.local כדי לשחק בין טלפונים.'
+    }</div>
   `;
 }
 

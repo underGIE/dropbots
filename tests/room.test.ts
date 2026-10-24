@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import pack from '../packs/demo-family.json';
-import { Room } from '../src/net/room';
+import { HEARTBEAT_MS, Room } from '../src/net/room';
 import { localBus } from '../src/transport/local';
 import type { ThemePack } from '../src/engine/types';
+import type { GameMsg } from '../src/transport/types';
 
 const PACK = pack as ThemePack;
 
@@ -97,6 +98,51 @@ describe('two clients in a room', () => {
     host.begin();
     expect(host.state?.phase).toBe('lobby');
     expect(host.error).toContain('needs 8');
+  });
+});
+
+describe('traffic', () => {
+  it('only broadcasts when something changed, plus a slow heartbeat', () => {
+    const bus = localBus();
+    let clock = 1_000_000;
+    const inner = bus.make();
+    let states = 0;
+    const counting = {
+      send: (m: GameMsg) => {
+        if (m.t === 'state') {
+          states += 1;
+        }
+        inner.send(m);
+      },
+      onMessage: (cb: (m: GameMsg) => void) => inner.onMessage(cb),
+      close: () => inner.close(),
+    };
+    const host = new Room({
+      transport: counting,
+      pack: PACK,
+      me: { id: 'h', name: 'אבי' },
+      isHost: true,
+      now: () => clock,
+      autoTick: false,
+    });
+    host.begin();
+    const afterStart = states;
+
+    // ten frames of absolutely nothing happening, inside one heartbeat window
+    for (let i = 0; i < 10; i++) {
+      clock += 50;
+      host.pump();
+    }
+    expect(states).toBe(afterStart);
+
+    clock += HEARTBEAT_MS;
+    host.pump();
+    expect(states).toBe(afterStart + 1);
+
+    // a real event always goes out
+    const asked = Object.values(host.state!.instructions)[0]!;
+    host.tap(asked.controlId);
+    expect(states).toBe(afterStart + 2);
   });
 });
 
