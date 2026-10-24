@@ -64,9 +64,9 @@ button:active { transform: translateY(1px); }
 .deck { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
 .pad {
   background: var(--box-2); border-radius: 12px; min-height: 76px; padding: 10px;
-  font-size: 15px; font-weight: 600; display: flex; align-items: center;
-  justify-content: center; text-align: center; cursor: pointer; user-select: none;
-  border: 0; color: var(--ink); margin: 0;
+  font-size: 15px; font-weight: 600; display: flex; flex-direction: column; gap: 4px;
+  align-items: center; justify-content: center; text-align: center; cursor: pointer;
+  user-select: none; border: 0; color: var(--ink); margin: 0;
 }
 .pad small { display: block; color: var(--dim); font-weight: 400; font-size: 11px; }
 
