@@ -69,5 +69,10 @@ verdict and a shareable line. Target match length 3–5 minutes.
 
 ## §g — Not in v1
 
-Real-time scoreboard across rooms, the fighter pack, photo sleeves, bracket mode,
-accounts, payments. v1 ends at "two phones in a room have fun for 4 minutes".
+Payments, accounts, a real-time scoreboard across rooms, the fighter pack, photo
+sleeves, bracket mode. v1 ends at "two phones in a room have fun for 4 minutes".
+
+Built since: the sales page (`/`), the six-question intake form (`/order/`) which
+turns answers into a validated pack and hands it straight to the game, and the
+Supabase transport. Still missing for a real order: a paid checkout, hosting on a
+public URL, and the art.

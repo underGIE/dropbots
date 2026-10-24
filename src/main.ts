@@ -12,8 +12,20 @@ const PACKS: Record<string, ThemePack> = {
   'techno-club': technoPack as ThemePack,
 };
 
+export const CUSTOM_KEY = 'dropbots:pack';
+
+/** A pack built in the order form is handed over through local storage. */
+function customPack(): ThemePack | null {
+  try {
+    const raw = localStorage.getItem(CUSTOM_KEY);
+    return raw ? (JSON.parse(raw) as ThemePack) : null;
+  } catch {
+    return null;
+  }
+}
+
 const wanted = new URLSearchParams(location.search).get('pack') ?? 'demo-family';
-const PACK = PACKS[wanted] ?? (demoPack as ThemePack);
+const PACK = (wanted === 'mine' ? customPack() : null) ?? PACKS[wanted] ?? (demoPack as ThemePack);
 
 // the skin is content: swapping a pack re-themes the whole screen, no code
 if (PACK.theme) {

@@ -74,3 +74,30 @@ button:active { transform: translateY(1px); }
 .big { font-size: 20px; font-weight: 700; }
 .err { color: var(--bad); font-size: 13px; margin-top: 8px; }
 .names { color: var(--dim); font-size: 14px; }
+
+/* --- form + landing --- */
+textarea {
+  width: 100%; padding: 14px; font-size: 16px; border-radius: 10px; line-height: 1.5;
+  border: 1px solid #3a3f46; background: var(--box-2); color: var(--ink); text-align: right;
+  font-family: inherit; resize: vertical;
+}
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip {
+  width: auto; margin: 0; padding: 11px 16px; font-size: 15px; border-radius: 999px;
+  background: var(--box-2); color: var(--dim); border: 1px solid transparent;
+}
+.chip.on { color: var(--ink); border-color: var(--ok); }
+
+.hero { padding: 28px 0 12px; }
+.hero h1 { font-size: 34px; letter-spacing: 3px; margin-bottom: 10px; }
+.lede { font-size: 18px; line-height: 1.5; color: var(--ink); margin-bottom: 6px; }
+.steps { counter-reset: step; }
+.step { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+.step b { color: var(--ok); font-size: 20px; min-width: 22px; }
+.tier { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 0;
+  border-bottom: 1px solid #31353c; }
+.tier:last-child { border-bottom: 0; }
+.tier .price { font-weight: 700; font-size: 19px; white-space: nowrap; }
+.tier .what { color: var(--dim); font-size: 13px; }
+.note { color: var(--dim); font-size: 13px; line-height: 1.6; }
+a.btn { display: block; text-decoration: none; text-align: center; }

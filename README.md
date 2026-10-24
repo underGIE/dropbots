@@ -17,4 +17,10 @@ npm test      # engine + two-client room tests
 npm run dev   # http://localhost:5174
 ```
 
-Two tabs, same room code (the code can ride in the link: `/#PRTY`).
+Three pages: `/` the sales page, `/order/` the six-question intake (answers →
+validated pack → straight into the game), `/play/` the game itself.
+Two tabs, same room code; the code rides in the link (`/play/#PRTY`).
+
+With `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` in `.env.local` the rooms run
+over Supabase realtime broadcast and real phones can join. Without them the same
+rooms run over BroadcastChannel in one browser. The engine does not know which.
