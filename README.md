@@ -1,4 +1,4 @@
-# TWO DJS
+# DROPBOTS
 
 Co-op party game for 2–4 phones in one room, sold as a one-time gift.
 The instruction on your screen names a control on somebody else's deck, so you
