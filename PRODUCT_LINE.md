@@ -18,6 +18,16 @@ Japan, becomes Pesach, whatever the gift is about.
 | 2 | **DROPBOTS** | co-op party game, 2–4 phones shouting at each other | built this week, web, 46 tests, playable now | link + QR, no install |
 | 3 | **The fighter** | a group of friends as fighters: versus, plus a story mode that takes down a villain they name. One joint gift, one symbolic payment. See `FIGHTER_SPEC.md` | not built; BamBasti is the web base (lives, 151 tests, combat feel spec) | link + QR |
 
+## Two more engines Avi named, 25 Oct
+
+| # | Engine | What it is | Where it stands |
+|---|---|---|---|
+| 4 | **Co-op puzzle, 2–4** | one puzzle split across phones: each player holds a piece of the answer and nobody can finish alone | not built; same room/transport as DROPBOTS, so it is content plus a board |
+| 5 | **The moving one** | a game you play with your body, not your thumbs — the phone itself is the controller (`DeviceMotion` / camera), for a room full of people | not built; needs a device-motion spike before anything is promised |
+
+Both are web, both ride the same pack contract. Five engines is the ceiling —
+nothing new gets added until two of them have been sold.
+
 ## What a theme pack is, across all three
 
 Same contract, so one intake form feeds any engine:

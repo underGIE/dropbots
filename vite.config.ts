@@ -12,6 +12,7 @@ export default defineConfig({
         landing: resolve(__dirname, 'index.html'),
         play: resolve(__dirname, 'play/index.html'),
         order: resolve(__dirname, 'order/index.html'),
+        fight: resolve(__dirname, 'fight/index.html'),
       },
     },
   },

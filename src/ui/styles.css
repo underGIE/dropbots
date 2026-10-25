@@ -101,3 +101,23 @@ textarea {
 .tier .what { color: var(--dim); font-size: 13px; }
 .note { color: var(--dim); font-size: 13px; line-height: 1.6; }
 a.btn { display: block; text-decoration: none; text-align: center; }
+
+/* --- the duel --- */
+.side { flex: 1; }
+.side.active .who { color: var(--ok); }
+.who { font-weight: 700; margin-bottom: 6px; }
+.hpbar { height: 12px; background: var(--box-2); border-radius: 6px; overflow: hidden; }
+.hpbar > i { display: block; height: 100%; background: var(--ok); transition: width 160ms; }
+.hpbar.low > i { background: var(--bad); }
+.pips { display: flex; gap: 4px; margin-top: 6px; }
+.pip { width: 14px; height: 6px; border-radius: 3px; background: var(--box-2); }
+.pip.on { background: var(--hot); }
+.stage { display: flex; gap: 12px; margin: 14px 0; }
+.fighter { flex: 1; }
+.fighter img { width: 100%; border-radius: 12px; display: block; }
+.posebox {
+  background: var(--box-2); border-radius: 12px; min-height: 130px; display: flex;
+  align-items: center; justify-content: center; font-weight: 700; color: var(--dim);
+}
+.posebox.hit { background: var(--bad); color: #fff; }
+.pad.special { grid-column: span 2; background: var(--hot); color: #1a1205; }
