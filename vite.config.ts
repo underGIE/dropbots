@@ -15,6 +15,7 @@ export default defineConfig({
         fight: resolve(__dirname, 'fight/index.html'),
         motion: resolve(__dirname, 'motion/index.html'),
         card: resolve(__dirname, 'card/index.html'),
+        locks: resolve(__dirname, 'locks/index.html'),
       },
     },
   },
