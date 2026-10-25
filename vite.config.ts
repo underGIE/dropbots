@@ -13,6 +13,8 @@ export default defineConfig({
         play: resolve(__dirname, 'play/index.html'),
         order: resolve(__dirname, 'order/index.html'),
         fight: resolve(__dirname, 'fight/index.html'),
+        motion: resolve(__dirname, 'motion/index.html'),
+        card: resolve(__dirname, 'card/index.html'),
       },
     },
   },
