@@ -3,10 +3,8 @@ import technoPack from '../packs/techno-club.json';
 import { deadlineMs } from './engine/match';
 import type { ThemePack } from './engine/types';
 import { Room } from './net/room';
-import { broadcastTransport } from './transport/broadcast';
 import { decodePack } from './share/pack-link';
-import { clientFromEnv, supabaseTransport, type RealtimeLike } from './transport/supabase';
-import type { Transport } from './transport/types';
+import { selectTransport } from './transport/select';
 
 const PACKS: Record<string, ThemePack> = {
   'demo-family': demoPack as ThemePack,
@@ -46,14 +44,9 @@ const app = document.getElementById('app')!;
 
 // With Supabase keys the room spans real phones; without them it still plays
 // across two tabs of one browser, so the game never depends on a backend.
-const realtime = clientFromEnv(import.meta.env as unknown as Record<string, string | undefined>);
-const online = realtime !== null;
-
-function makeTransport(code: string): Transport {
-  return online
-    ? supabaseTransport(code, realtime as unknown as RealtimeLike)
-    : broadcastTransport(code);
-}
+const { online, makeTransport } = selectTransport(
+  import.meta.env as unknown as Record<string, string | undefined>,
+);
 
 let room: Room | null = null;
 let draftName = '';

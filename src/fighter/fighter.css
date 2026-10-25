@@ -1,0 +1,21 @@
+/* Fighter-only additions on top of src/ui/styles.css. Still placeholder grey. */
+.fight-mode { margin: 10px 0 12px; }
+.fight-mode .chip { flex: 1; text-align: center; }
+
+.fight-link { word-break: break-all; text-align: center; margin-top: 8px; }
+
+.fight-wait {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  color: var(--dim); font-size: 15px; margin-top: 10px;
+}
+.fight-wait .dot {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--hot);
+  animation: fight-pulse 1s ease-in-out infinite;
+}
+@keyframes fight-pulse { 50% { opacity: 0.25; } }
+@media (prefers-reduced-motion: reduce) { .fight-wait .dot { animation: none; } }
+
+.fight-foe { color: var(--dim); font-size: 14px; text-align: center; margin-top: 4px; }
+.fight-foe.ready { color: var(--hot); }
+
+.fight-picks { color: var(--ink); font-size: 15px; margin: 10px 0 0; }
