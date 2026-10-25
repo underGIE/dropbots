@@ -16,7 +16,7 @@ Japan, becomes Pesach, whatever the gift is about.
 |---|---|---|---|---|
 | 1 | **Shanzia** | music adventure: trivia, crossword, map, dub studio | built, deep, 90% theme-clean per its own engine audit (half a day per re-theme) | **iOS native — cannot be sent as a link.** The open question below. |
 | 2 | **DROPBOTS** | co-op party game, 2–4 phones shouting at each other | built this week, web, 46 tests, playable now | link + QR, no install |
-| 3 | **The fighter** | friends as fighters, short rounds | not built; BamBasti is the web base (lives, 151 tests, combat feel spec) | link + QR |
+| 3 | **The fighter** | a group of friends as fighters: versus, plus a story mode that takes down a villain they name. One joint gift, one symbolic payment. See `FIGHTER_SPEC.md` | not built; BamBasti is the web base (lives, 151 tests, combat feel spec) | link + QR |
 
 ## What a theme pack is, across all three
 
