@@ -62,9 +62,9 @@ date, thirty recipients.
 | Engine | Playable | Tests | What a demo still needs |
 |---|---|---|---|
 | DROPBOTS | yes, 2 tabs; real phones once Supabase keys land | 46 | keys, a two-person playtest |
-| The fighter | yes, hot-seat versus | 16 | two phones over the existing room; story mode |
-| Co-op puzzle | no | 0 | a spec and a weekend |
-| The moving one | no | 0 | a device-motion spike on an iPhone and an Android before anything is promised |
+| The fighter | yes: hot-seat, two phones, story mode vs the villain | 58 | gender field per fighter; story pack via ?c= link |
+| Co-op puzzle (THE LOCKS) | yes, 2–4 phones | 22 | facts in the order form; a two-person playtest |
+| The moving one | spike page live at /motion/ | 25 | Avi's iPhone verdict (HTTPS now live) |
 | Shanzia web-lite | no | 0 | port of trivia + crossword + gallery (all data already) |
 
 ## The automation order (what to build, in sequence)

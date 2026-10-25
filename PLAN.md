@@ -60,7 +60,7 @@ once. Codex burns its credits on bulk ports before the 28th.
 phones) and M4 (THE LOCKS, engine + playable page) are done and committed; the
 suite is 134 green. Pack links are now deflated (`?c=`), which took an
 8-joke order from 1960 to 785 characters and the QR from unscannable to the
-edge of comfortable. M5 is next. M6 and M8 wait on Avi. M7 is a Codex brief.
+edge of comfortable. M5 (story mode, 4-fight ladder vs the villain, all pack data, 27 tests) landed 08:30 — 161 green. M6 and M8 wait on Avi. M7 is a Codex brief.
 
 ## Gates Avi owns
 

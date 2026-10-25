@@ -48,3 +48,74 @@ The same six-question shape as DROPBOTS, plus the parts a fighter needs:
 
 Online matchmaking, ranked play, more than two poses, voice acting beyond the
 recorded one-liners, a store.
+
+## §story — Story mode (M5, 25 Oct)
+
+One phone, one human. They pick themself from the group's roster and climb a
+ladder of fights against the other friends (computer-driven) up to the villain.
+Everything that makes it theirs is pack JSON; the rules are code that never
+changes per order.
+
+### Data shape (`packs/fighter-demo.json`, types in `src/fighter/story-types.ts`)
+
+```
+{
+  "slug", "title", "subtitle",
+  "roster":  [ { id, name, trait, special, art?, standIn? } ],   // ≥ 2 friends
+  "villain": { id, name, trait, special, art?, intro, defeatLine, taunts: [..], hpScale },
+  "ladder":  [ { opponent: "<roster id>" | "villain", intro, persona } ],  // villain last, once
+  "ending":  { title, text }
+}
+```
+
+`persona` is one of `brawler | turtle | trickster | boss`. `validateStoryPack(pack)`
+returns plain-words errors (empty list = it plays): missing fields, fewer than 2
+fighters, duplicate or reserved ids (`"villain"` is reserved), the villain sharing
+an id with a friend, a ladder naming someone not in the roster, an unknown
+persona, the villain not last (or twice), empty taunts or an empty taunt,
+`hpScale` outside 1–3, no ending, and — walked for every possible hero — a hero
+who would have to fight themself with nobody left to take that fight.
+
+### Decisions
+
+- **Nobody fights themself: stand-ins.** A rung written for the hero goes to the
+  first roster friend who is *not on the ladder at all* (roster order); each
+  stand-in is used once. The stand-in keeps the rung's persona. Because the
+  rung's intro line was written about the friend it names, a stand-in uses their
+  own optional `standIn` line instead (fallback: a generic "takes the empty
+  spot" line). With 4 friends and 3 friend rungs, every hero meets the other
+  three. If every friend is on the ladder, validation refuses the pack.
+- **The villain's extra health is an HP override, not a tuning change.** The
+  fight starts from `createDuel` and then sets `hp[1] = round(startHp × hpScale)`
+  (60 → 90 in the demo). Damage numbers are identical for both sides, the boss
+  just lasts longer. The story keeps `maxHp` per side and the bars draw against
+  it (the shared `bars()` helper takes an optional `maxHp`; versus modes pass
+  nothing and are unchanged).
+- **The human is always side 0**, so they attack first in every fight; from then
+  on `playRound` alternates as usual, and on the computer's attack turns the
+  human picks a guard against a hidden, already-rolled attack.
+- **Personas are weighted tables** (`src/fighter/ai.ts`). Brawler leans strike
+  (6/2/2), turtle leans block/counter (5/1/4), trickster leans grab and dodge.
+  Each has a chance to fire the special when it is available (brawler 0.7,
+  turtle 0.35, trickster 0.5); none can use it while `canSpecial` is false.
+- **The boss adapts.** It fires the special the first turn it is available. On
+  attack it adds +2 to each attack that lands clean on each of the human's last
+  two guards (a human who keeps blocking sees fewer strikes). On defence it adds
+  +2 to the guard that stops each of the human's last two attacks, and +3 to
+  counter when the human's special is ready. "A little": the base table still
+  dominates after one read.
+- **The AI needs the human's history,** which `DuelState` does not keep, so
+  `aiAttack/aiGuard` take an optional fifth argument `{ attacks, guards }`; the
+  story keeps the last two of each, per fight.
+- **Seeded and pure.** No rng object lives in the state: each roll is
+  `makeRng(hash(seed, rung, attempt, round))`, so a story replays exactly from
+  its seed and `aiChoice(state)` can be peeked (the tests do).
+- **Continues.** Start with 2. A loss spends one and retries the same rung at
+  full health; a loss with 0 left ends the story. Every rung starts at full
+  health. A retry at the villain rolls a fresh taunt.
+- **Count.** The demo ladder is 3 friends + the villain = 4 fights (PLAN.md's
+  "5-fight ladder" assumed 5 rungs; the decided shape is 4 friends in the roster,
+  so 4 fights).
+- **Text is neutral on gender.** The pack has no gender field, so story-mode
+  lines avoid gendered verbs about the hero or the opponent ("הניצחון של מיכל",
+  not "מיכל ניצח"). The shared attack/guard screens still say "אתה".
