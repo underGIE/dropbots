@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite --port 5174 --host",
     "build": "tsc --noEmit && vite build",
-    "test": "vitest run"
+    "test": "vitest run",
+    "deploy": "bash deploy/publish.sh"
   },
   "devDependencies": {
     "@types/node": "^22.9.0",
