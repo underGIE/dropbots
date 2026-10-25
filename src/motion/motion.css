@@ -1,0 +1,25 @@
+/* Placeholder design: grey boxes, big text. Spike page only. */
+.state { font-size: 28px; font-weight: 700; text-align: center; padding: 14px; border-radius: 12px; background: var(--box); direction: ltr; }
+.state.granted { color: var(--ok); }
+.state.denied, .state.unsupported { color: var(--bad); }
+.state.not-requested { color: var(--dim); }
+
+.grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; direction: ltr; text-align: center; }
+.grid .cell { background: var(--box-2); border-radius: 8px; padding: 8px 4px; }
+.grid .cell b { display: block; font-size: 20px; font-variant-numeric: tabular-nums; }
+.grid .cell span { font-size: 12px; color: var(--dim); }
+.title { font-size: 14px; color: var(--dim); margin-bottom: 8px; }
+
+.hz { font-size: 40px; font-weight: 700; text-align: center; direction: ltr; font-variant-numeric: tabular-nums; }
+
+.shake { text-align: center; padding: 18px; border-radius: 12px; background: var(--box-2); transition: background 250ms ease-out; }
+.shake.flash { background: var(--hot); color: #1a1405; transition: none; }
+.shake .n { font-size: 64px; font-weight: 800; line-height: 1; }
+
+.square { position: relative; width: 100%; max-width: 280px; aspect-ratio: 1; margin: 0 auto; background: var(--box-2); border-radius: 12px; }
+.square::before, .square::after { content: ''; position: absolute; background: #3a3f46; }
+.square::before { left: 50%; top: 0; bottom: 0; width: 1px; }
+.square::after { top: 50%; left: 0; right: 0; height: 1px; }
+.dot { position: absolute; width: 36px; height: 36px; margin: -18px 0 0 -18px; border-radius: 50%; background: var(--ok); left: 50%; top: 50%; will-change: transform; }
+
+.log { direction: ltr; text-align: left; font-family: ui-monospace, Menlo, monospace; font-size: 12px; line-height: 1.5; max-height: 220px; overflow-y: auto; white-space: pre-wrap; word-break: break-word; }
