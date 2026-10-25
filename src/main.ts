@@ -4,6 +4,7 @@ import { deadlineMs } from './engine/match';
 import type { ThemePack } from './engine/types';
 import { Room } from './net/room';
 import { broadcastTransport } from './transport/broadcast';
+import { decodePack } from './share/pack-link';
 import { clientFromEnv, supabaseTransport, type RealtimeLike } from './transport/supabase';
 import type { Transport } from './transport/types';
 
@@ -24,8 +25,16 @@ function customPack(): ThemePack | null {
   }
 }
 
-const wanted = new URLSearchParams(location.search).get('pack') ?? 'demo-family';
-const PACK = (wanted === 'mine' ? customPack() : null) ?? PACKS[wanted] ?? (demoPack as ThemePack);
+const params = new URLSearchParams(location.search);
+const carried = params.get('p');
+const wanted = params.get('pack') ?? 'demo-family';
+
+// a gift link carries the whole pack, so any phone can open it cold
+const PACK =
+  (carried ? decodePack(carried) : null) ??
+  (wanted === 'mine' ? customPack() : null) ??
+  PACKS[wanted] ??
+  (demoPack as ThemePack);
 
 // the skin is content: swapping a pack re-themes the whole screen, no code
 if (PACK.theme) {

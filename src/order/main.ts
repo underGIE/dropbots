@@ -1,3 +1,4 @@
+import { playLink } from '../share/pack-link';
 import { buildPack, type Answers, type Crowd, type World } from './build-pack';
 
 const app = document.getElementById('app')!;
@@ -71,7 +72,9 @@ function form(): string {
 
     <div class="card">
       <button class="primary" id="play">בנה ושחק עכשיו</button>
+      <button id="link">צור לינק לשליחה</button>
       <button id="download">הורד את קובץ הפאק</button>
+      <div id="linkout"></div>
     </div>
   `;
 }
@@ -161,7 +164,28 @@ function wire(): void {
     } catch {
       // private mode: fall through, the demo pack still plays
     }
-    location.href = '/play/?pack=mine';
+    location.href = playLink(pack, location.href);
+  });
+  app.querySelector('#link')?.addEventListener('click', () => {
+    readForm();
+    const { pack } = buildPack(answers);
+    const url = playLink(pack, location.href);
+    const out = app.querySelector('#linkout')!;
+    out.innerHTML = `
+      <div class="sub" style="margin:12px 0 6px">זה הלינק. כל טלפון שפותח אותו מקבל את המשחק שלכם — בלי התקנה ובלי חשבון.</div>
+      <input id="linkfield" readonly value="${url}" />
+      <button id="copy">העתק</button>`;
+    out.querySelector<HTMLInputElement>('#linkfield')?.select();
+    out.querySelector('#copy')?.addEventListener('click', async () => {
+      const field = out.querySelector<HTMLInputElement>('#linkfield')!;
+      field.select();
+      try {
+        await navigator.clipboard.writeText(url);
+        out.querySelector('#copy')!.textContent = 'הועתק';
+      } catch {
+        out.querySelector('#copy')!.textContent = 'סמן והעתק ידנית';
+      }
+    });
   });
   app.querySelector('#download')?.addEventListener('click', () => {
     readForm();
