@@ -35,18 +35,37 @@ If a customer's request needs an engine change, the engine has a bug: it should
 be reading that from the pack. Hours per order go in the pack spec; a pack over
 15 hours means the price or the scope is wrong.
 
-## Open, blocks the build order
+## Decided 25 Oct 2026: everything is web
 
-**Shanzia is native iOS.** Three ways to go, and this is Avi's call:
+Avi's call, and the reason is commercial, not technical: a native app drags in
+the Apple developer licence and the store's payment rules, and you cannot ship
+many small personalised builds through a store at all. A browser game plays fine
+on a phone, costs nothing per build, and is delivered as a link.
 
-1. **Web port of Shanzia** — the content (questions, crosswords, map, records)
-   is already JSON and portable; the Swift UI and the audio engine are not.
-   Weeks of work, and it would make all three engines deliverable by link.
-2. **Shanzia stays the premium boutique product** — one recipient, one phone,
-   needs the paid Apple account; the link-delivered line is DROPBOTS + fighter
-   + a third web game.
-3. **Shanzia web-lite** — port only trivia + crossword + gallery (the parts that
-   are pure data), leave the dub studio native. Days, not weeks.
+So: the shared layers — recorded voice, music, art slots, pack JSON — are
+written **once, for web**. Shanzia's path is web-lite: trivia, crossword and
+gallery are already pure data and port in days; the dub studio stays native and
+stays the premium boutique product.
 
-Nothing else should be built until that is answered, because it decides whether
-the shared layers (voice, music, art slots) are written once for web or twice.
+## The market, checked 25 Oct 2026
+
+- **bdaygame.com** sells personalised pixel games as gifts: USD 250 for a fixed
+  story with customised dialogue (a few days), USD 450+ for a fully custom story
+  (several weeks). Delivered as **Windows files over WeTransfer**, single player.
+- **Etsy** sells $30 fake "video game cases" for proposals — the wish exists at
+  volume, with no playable product behind it.
+- **Israel**: custom escape rooms built from a questionnaire run about ₪500 with
+  an operator; event gaming trucks start around ₪330. The event budget is local
+  and real, but nobody delivers a personalised digital game.
+- **Fiverr** benchmarks a small browser game commission around $80 and a full
+  game around $230 — that is the ceiling a one-off commission can charge.
+- The personalised gifts category was about USD 30B in 2024 and is forecast at
+  5-9% CAGR, so personalisation itself is not the risk.
+
+**The gap:** nobody sells a personalised, link-delivered, multiplayer party game.
+bdaygame is single player, download-only and Windows. Our edge is web delivery,
+two to four phones in a room, Hebrew, and the recorded voice.
+
+**The constraint:** hours per order. At 15 hours an order ₪199 is a loss. The
+whole business is "engine fixed, pack is data" and an order that takes under
+three hours.
