@@ -1,0 +1,62 @@
+/* The printable gift card. Own stylesheet so the shared one stays untouched.
+   Placeholder design on purpose: big type, black on white, no art. */
+:root {
+  font-family: system-ui, -apple-system, 'Segoe UI', 'Arial Hebrew', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #d9dbde;
+  color: #111;
+  -webkit-text-size-adjust: 100%;
+}
+
+#app { padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 16px; }
+
+/* The sheet is A5 in real units; container units keep the type proportional
+   when a phone screen shows it narrower than 148mm. */
+.sheet {
+  container-type: inline-size;
+  width: min(148mm, 100%);
+  aspect-ratio: 148 / 210;
+  background: #fff;
+  padding: 9cqw 9cqw 8cqw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.25);
+}
+
+.sheet .occasion { font-size: 5cqw; font-weight: 600; color: #444; min-height: 6.5cqw; }
+.sheet h1 { font-size: 11cqw; line-height: 1.1; margin: 2cqw 0 4cqw; letter-spacing: 0; }
+.sheet .to { font-size: 6.5cqw; font-weight: 700; margin: 0 0 5cqw; }
+.sheet .to span { font-weight: 400; color: #444; }
+
+.sheet .qr { width: 62cqw; flex: none; }
+.sheet .qr svg { display: block; width: 100%; height: auto; }
+.sheet .qr-fail { width: 62cqw; padding: 6cqw 3cqw; border: 0.6cqw dashed #999; font-size: 4.4cqw; color: #a02020; }
+
+.sheet .how { margin-top: auto; font-size: 5.4cqw; font-weight: 700; line-height: 1.3; }
+
+.bar { width: min(148mm, 100%); display: flex; gap: 10px; }
+.bar button {
+  flex: 1; padding: 15px; font-size: 17px; font-weight: 600;
+  border: 0; border-radius: 10px; background: #111; color: #fff; cursor: pointer;
+}
+.msg { padding: 24px; background: #fff; border-radius: 12px; font-size: 18px; max-width: 480px; text-align: center; }
+
+@page { size: A5 portrait; margin: 0; }
+
+@media print {
+  html, body { background: #fff; width: 148mm; height: 210mm; margin: 0; overflow: hidden; }
+  #app { padding: 0; display: block; }
+  .bar, .msg { display: none; }
+  .sheet {
+    width: 148mm; height: 210mm; aspect-ratio: auto;
+    box-shadow: none; break-after: avoid; break-inside: avoid;
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+  }
+}

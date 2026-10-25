@@ -73,6 +73,7 @@ function form(): string {
     <div class="card">
       <button class="primary" id="play">בנה ושחק עכשיו</button>
       <button id="link">צור לינק לשליחה</button>
+      <button id="cardbtn">כרטיס מתנה להדפסה</button>
       <button id="download">הורד את קובץ הפאק</button>
       <div id="linkout"></div>
     </div>
@@ -186,6 +187,11 @@ function wire(): void {
         out.querySelector('#copy')!.textContent = 'סמן והעתק ידנית';
       }
     });
+  });
+  app.querySelector('#cardbtn')?.addEventListener('click', () => {
+    readForm();
+    const { pack } = buildPack(answers);
+    window.open(playLink(pack, location.href, '../card/'), '_blank');
   });
   app.querySelector('#download')?.addEventListener('click', () => {
     readForm();
