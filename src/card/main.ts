@@ -1,5 +1,5 @@
 import './card.css';
-import { decodePack, playLink } from '../share/pack-link';
+import { packFromParams, playLink } from '../share/pack-link';
 import { qrSvg } from '../share/qr';
 
 const app = document.getElementById('app')!;
@@ -8,9 +8,8 @@ function esc(text: string): string {
   return text.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 }
 
-function render(): void {
-  const encoded = new URLSearchParams(location.search).get('p');
-  const pack = encoded ? decodePack(encoded) : null;
+async function render(): Promise<void> {
+  const pack = await packFromParams(new URLSearchParams(location.search));
   if (!pack) {
     app.innerHTML = '<div class="msg">אין כאן משחק. חזרו לטופס ההזמנה וצרו את הכרטיס משם.</div>';
     return;
@@ -18,7 +17,7 @@ function render(): void {
 
   // Same hop as the order page: one level up and into /play/, so the link is
   // right at the domain root and under /dropbots/ alike.
-  const url = playLink(pack, location.href);
+  const url = await playLink(pack, location.href);
   let qr: string;
   try {
     qr = `<div class="qr">${qrSvg(url)}</div>`;
@@ -39,4 +38,4 @@ function render(): void {
   app.querySelector('#print')?.addEventListener('click', () => window.print());
 }
 
-render();
+void render();

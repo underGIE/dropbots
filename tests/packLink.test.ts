@@ -1,7 +1,16 @@
 import { describe, expect, it } from 'vitest';
 import demo from '../packs/demo-family.json';
 import { buildPack } from '../src/order/build-pack';
-import { decodePack, encodePack, looksLikePack, playLink } from '../src/share/pack-link';
+import {
+  decodePack,
+  decodePackCompressed,
+  encodePack,
+  encodePackCompressed,
+  looksLikePack,
+  packFromParams,
+  playLink,
+  playLinkRaw,
+} from '../src/share/pack-link';
 import type { ThemePack } from '../src/engine/types';
 
 const PACK = demo as ThemePack;
@@ -34,7 +43,7 @@ describe('pack links', () => {
       crowd: 'mixed',
       occasion: 'חג',
     });
-    const link = playLink(pack, 'https://undergie.github.io/dropbots/order/');
+    const link = playLinkRaw(pack, 'https://undergie.github.io/dropbots/order/');
     expect(link.startsWith('https://undergie.github.io/dropbots/play/?p=')).toBe(true);
     const carried = decodePack(new URL(link).searchParams.get('p')!);
     expect(carried?.controls[0]?.label).toBe('טיפקס');
@@ -50,6 +59,35 @@ describe('pack links', () => {
       crowd: 'mixed',
       occasion: 'ראש השנה',
     });
-    expect(playLink(pack, 'https://undergie.github.io/dropbots/order/').length).toBeLessThan(4000);
+    expect(playLinkRaw(pack, 'https://undergie.github.io/dropbots/order/').length).toBeLessThan(4000);
+  });
+});
+
+describe('compressed pack links', () => {
+  it('round-trips through deflate, Hebrew included', async () => {
+    const back = await decodePackCompressed(await encodePackCompressed(PACK));
+    expect(back).toEqual(PACK);
+  });
+
+  it('is well under half the raw size — that is what makes the QR scannable', async () => {
+    const raw = encodePack(PACK).length;
+    const small = (await encodePackCompressed(PACK)).length;
+    expect(small).toBeLessThan(raw * 0.5);
+  });
+
+  it('the link people get is the compressed one, and the page reads both forms', async () => {
+    const link = await playLink(PACK, 'https://undergie.github.io/dropbots/order/');
+    const url = new URL(link);
+    expect(url.pathname).toBe('/dropbots/play/');
+    expect(url.searchParams.has('c')).toBe(true);
+    expect(await packFromParams(url.searchParams)).toEqual(PACK);
+    const legacy = new URL(playLinkRaw(PACK, 'https://x.test/order/'));
+    expect(await packFromParams(legacy.searchParams)).toEqual(PACK);
+    expect(await packFromParams(new URLSearchParams(''))).toBeNull();
+  });
+
+  it('refuses garbage in the compressed slot', async () => {
+    expect(await decodePackCompressed('not-deflate-at-all')).toBeNull();
+    expect(await packFromParams(new URLSearchParams('c=zzz'))).toBeNull();
   });
 });

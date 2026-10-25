@@ -3,7 +3,7 @@ import technoPack from '../packs/techno-club.json';
 import { deadlineMs } from './engine/match';
 import type { ThemePack } from './engine/types';
 import { Room } from './net/room';
-import { decodePack } from './share/pack-link';
+import { packFromParams } from './share/pack-link';
 import { selectTransport } from './transport/select';
 
 const PACKS: Record<string, ThemePack> = {
@@ -24,19 +24,24 @@ function customPack(): ThemePack | null {
 }
 
 const params = new URLSearchParams(location.search);
-const carried = params.get('p');
 const wanted = params.get('pack') ?? 'demo-family';
 
+// filled by boot(); everything below reads it at call time, never at import
+let PACK: ThemePack = demoPack as ThemePack;
+
 // a gift link carries the whole pack, so any phone can open it cold
-const PACK =
-  (carried ? decodePack(carried) : null) ??
-  (wanted === 'mine' ? customPack() : null) ??
-  PACKS[wanted] ??
-  (demoPack as ThemePack);
+async function resolvePack(): Promise<ThemePack> {
+  return (
+    (await packFromParams(params)) ??
+    (wanted === 'mine' ? customPack() : null) ??
+    PACKS[wanted] ??
+    (demoPack as ThemePack)
+  );
+}
 
 // the skin is content: swapping a pack re-themes the whole screen, no code
-if (PACK.theme) {
-  for (const [token, value] of Object.entries(PACK.theme)) {
+function applyTheme(pack: ThemePack): void {
+  for (const [token, value] of Object.entries(pack.theme ?? {})) {
     document.documentElement.style.setProperty(`--${token === 'box2' ? 'box-2' : token}`, value);
   }
 }
@@ -265,7 +270,13 @@ setInterval(() => {
 if (location.hash.length > 1) {
   draftCode = location.hash.replace('#', '').toUpperCase();
 }
-render();
+
+async function boot(): Promise<void> {
+  PACK = await resolvePack();
+  applyTheme(PACK);
+  render();
+}
+void boot();
 
 // dev-only handle so a browser test can reach the live room
 if (import.meta.env.DEV) {

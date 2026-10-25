@@ -157,7 +157,7 @@ function wire(): void {
       refresh();
     }
   });
-  app.querySelector('#play')?.addEventListener('click', () => {
+  app.querySelector('#play')?.addEventListener('click', async () => {
     readForm();
     const { pack } = buildPack(answers);
     try {
@@ -165,12 +165,12 @@ function wire(): void {
     } catch {
       // private mode: fall through, the demo pack still plays
     }
-    location.href = playLink(pack, location.href);
+    location.href = await playLink(pack, location.href);
   });
-  app.querySelector('#link')?.addEventListener('click', () => {
+  app.querySelector('#link')?.addEventListener('click', async () => {
     readForm();
     const { pack } = buildPack(answers);
-    const url = playLink(pack, location.href);
+    const url = await playLink(pack, location.href);
     const out = app.querySelector('#linkout')!;
     out.innerHTML = `
       <div class="sub" style="margin:12px 0 6px">זה הלינק. כל טלפון שפותח אותו מקבל את המשחק שלכם — בלי התקנה ובלי חשבון.</div>
@@ -188,10 +188,17 @@ function wire(): void {
       }
     });
   });
-  app.querySelector('#cardbtn')?.addEventListener('click', () => {
+  app.querySelector('#cardbtn')?.addEventListener('click', async () => {
     readForm();
     const { pack } = buildPack(answers);
-    window.open(playLink(pack, location.href, '../card/'), '_blank');
+    // open synchronously so the popup is not blocked, then point it
+    const tab = window.open('', '_blank');
+    const url = await playLink(pack, location.href, '../card/');
+    if (tab) {
+      tab.location.href = url;
+    } else {
+      location.href = url;
+    }
   });
   app.querySelector('#download')?.addEventListener('click', () => {
     readForm();
