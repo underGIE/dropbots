@@ -16,6 +16,7 @@ export default defineConfig({
         motion: resolve(__dirname, 'motion/index.html'),
         card: resolve(__dirname, 'card/index.html'),
         locks: resolve(__dirname, 'locks/index.html'),
+        gift: resolve(__dirname, 'gift/index.html'),
       },
     },
   },

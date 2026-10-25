@@ -4,6 +4,8 @@ import { START_CONTINUES, afterFight, beginFight, createStory, currentRung, huma
 import { validateStoryPack, type StoryPack } from './story-types';
 import type { Attack, DuelState, Fighter, Guard } from './types';
 import storyPackJson from '../../packs/fighter-demo.json';
+import { buildAll } from '../order/build-all';
+import { orderFromParams } from '../share/order-link';
 import { selectTransport } from '../transport/select';
 import './fighter.css';
 
@@ -574,7 +576,7 @@ function wireTwo(r: DuelRoom): void {
  * story.ts. Reuses the attack/guard/reveal screens above for the human's side.
  * ------------------------------------------------------------------------- */
 
-const storyErrors = validateStoryPack(storyPackJson);
+let storyErrors = validateStoryPack(storyPackJson);
 
 /** pack text lands in innerHTML, so escape it once, before the engine builds lines from it */
 function deepEsc(x: unknown): unknown {
@@ -590,7 +592,7 @@ function deepEsc(x: unknown): unknown {
   return x;
 }
 
-const storyPack: StoryPack | null = storyErrors.length ? null : (deepEsc(storyPackJson) as StoryPack);
+let storyPack: StoryPack | null = storyErrors.length ? null : (deepEsc(storyPackJson) as StoryPack);
 let story: StoryState | null = null;
 let storyScreen: 'pick' | 'intro' | 'fight' | 'reveal' | 'result' | 'ending' = 'pick';
 
@@ -791,7 +793,35 @@ function wireStory(): void {
   }
 }
 
-render();
+/**
+ * A gift link (?o=) wins over the demo: story mode plays the order's pack, and
+ * the versus setup starts from its first two friends instead of the defaults.
+ * Without ?o= nothing here runs and all three modes behave as before.
+ */
+async function boot(): Promise<void> {
+  const order = await orderFromParams(new URLSearchParams(location.search));
+  const built = order ? buildAll(order).story : null;
+  if (built) {
+    storyErrors = validateStoryPack(built);
+    storyPack = storyErrors.length ? null : (deepEsc(built) as StoryPack);
+    const [a, b] = built.roster;
+    if (a && b && !storyErrors.length) {
+      // deepEsc'd like the pack: the setup and the hot-seat screens print these raw
+      const seed = (f: typeof a, id: string): Fighter => ({
+        id,
+        name: esc(f.name),
+        trait: esc(f.trait),
+        special: esc(f.special || `${f.trait} של ${f.name}`),
+      });
+      DEFAULTS[0] = seed(a, 'f1');
+      DEFAULTS[1] = seed(b, 'f2');
+      fighters = [{ ...DEFAULTS[0] }, { ...DEFAULTS[1] }];
+    }
+  }
+  render();
+}
+
+void boot();
 
 // dev-only handle so a browser test can reach the live duel room and the story
 if (import.meta.env.DEV) {

@@ -2,7 +2,9 @@ import demoPack from '../packs/demo-family.json';
 import technoPack from '../packs/techno-club.json';
 import { deadlineMs } from './engine/match';
 import type { ThemePack } from './engine/types';
+import { buildAll } from './order/build-all';
 import { Room } from './net/room';
+import { orderFromParams } from './share/order-link';
 import { packFromParams } from './share/pack-link';
 import { selectTransport } from './transport/select';
 
@@ -31,6 +33,11 @@ let PACK: ThemePack = demoPack as ThemePack;
 
 // a gift link carries the whole pack, so any phone can open it cold
 async function resolvePack(): Promise<ThemePack> {
+  // one gift link carries the whole order and wins over every other source
+  const order = await orderFromParams(params);
+  if (order) {
+    return buildAll(order).party;
+  }
   return (
     (await packFromParams(params)) ??
     (wanted === 'mine' ? customPack() : null) ??

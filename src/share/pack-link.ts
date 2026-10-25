@@ -54,7 +54,7 @@ export function looksLikePack(value: unknown): value is ThemePack {
   return true;
 }
 
-function toBase64Url(bytes: Uint8Array): string {
+export function toBase64Url(bytes: Uint8Array): string {
   let binary = '';
   for (const b of bytes) {
     binary += String.fromCharCode(b);
@@ -62,13 +62,13 @@ function toBase64Url(bytes: Uint8Array): string {
   return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-function fromBase64Url(encoded: string): Uint8Array {
+export function fromBase64Url(encoded: string): Uint8Array {
   const padded = encoded.replace(/-/g, '+').replace(/_/g, '/');
   const binary = atob(padded + '='.repeat((4 - (padded.length % 4)) % 4));
   return Uint8Array.from(binary, (c) => c.charCodeAt(0));
 }
 
-async function pipe(bytes: Uint8Array, stream: CompressionStream | DecompressionStream): Promise<Uint8Array> {
+export async function pipe(bytes: Uint8Array, stream: CompressionStream | DecompressionStream): Promise<Uint8Array> {
   const out = new Blob([bytes as BlobPart]).stream().pipeThrough(stream);
   return new Uint8Array(await new Response(out).arrayBuffer());
 }

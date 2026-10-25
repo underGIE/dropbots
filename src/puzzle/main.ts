@@ -1,11 +1,25 @@
 import demoFacts from './demo-facts.json';
 import { currentLock, viewFor } from './locks';
 import { LocksRoom, type LocksMsg } from './net';
-import type { Fact } from './types';
+import type { Fact, PuzzleTuning } from './types';
+import { buildAll } from '../order/build-all';
+import { orderFromParams } from '../share/order-link';
 import { broadcastTransport } from '../transport/broadcast';
 
 const app = document.getElementById('app')!;
-const FACTS = demoFacts as Fact[];
+
+// filled by boot(); a gift link (?o=) swaps in the order's facts and tuning
+let FACTS: Fact[] = demoFacts as Fact[];
+let TUNING: PuzzleTuning | undefined;
+
+async function resolveLocks(): Promise<void> {
+  const order = await orderFromParams(new URLSearchParams(location.search));
+  const built = order ? buildAll(order).locks : null;
+  if (built) {
+    FACTS = built.facts;
+    TUNING = built.tuning;
+  }
+}
 
 let room: LocksRoom | null = null;
 let draftName = '';
@@ -18,6 +32,7 @@ function enter(roomCode: string, isHost: boolean): void {
   room = new LocksRoom({
     transport: broadcastTransport<LocksMsg>(roomCode),
     facts: FACTS,
+    tuning: TUNING,
     me: { id: id(), name: draftName.trim() || 'אורח' },
     isHost,
   });
@@ -234,4 +249,9 @@ if (import.meta.env.DEV) {
   (window as unknown as { __locks: unknown }).__locks = { room: () => room };
 }
 
-render();
+async function boot(): Promise<void> {
+  await resolveLocks();
+  render();
+}
+
+void boot();
