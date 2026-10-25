@@ -56,7 +56,7 @@ once. Codex burns its credits on bulk ports before the 28th.
 | M9 | Order #0: Avi's own order through the whole pipeline, hours logged | **Avi** | it is his product | hours per step in OPERATIONS.md |
 | M10 | Playtest with two real humans, filmed | **Avi** | red blocker before any sale | a 30-second video and a list of what broke |
 
-**Status 25 Oct, 07:40** — M1 (motion spike), M2 (QR card), M3 (duel on two
+**Live since 25 Oct 07:50 at https://undergie.github.io/dropbots/ (public repo `underGIE/dropbots`, branch deploy).** **Status 25 Oct, 07:40** — M1 (motion spike), M2 (QR card), M3 (duel on two
 phones) and M4 (THE LOCKS, engine + playable page) are done and committed; the
 suite is 134 green. Pack links are now deflated (`?c=`), which took an
 8-joke order from 1960 to 785 characters and the QR from unscannable to the

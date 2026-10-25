@@ -1,5 +1,7 @@
 # DROPBOTS
 
+Live: https://undergie.github.io/dropbots/ — `npm run deploy` republishes.
+
 Co-op party game for 2–4 phones in one room, sold as a one-time gift.
 The instruction on your screen names a control on somebody else's deck, so you
 have to shout it. Crowd hype instead of hull integrity.
