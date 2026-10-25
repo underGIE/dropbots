@@ -67,6 +67,13 @@ describe('one order, every engine', () => {
     expect(by(buildAll(dupe), 'locks').missing.join(' ')).toContain('חולקות תשובה');
   });
 
+  it('locks: two phones get one clue per lock, four phones get two', () => {
+    const two = buildAll({ ...FULL, players: 2 });
+    expect(by(two, 'locks').ready).toBe(true);
+    expect(two.locks?.tuning.cluesPerLock).toBe(1);
+    expect(buildAll({ ...FULL, players: 4 }).locks?.tuning.cluesPerLock).toBe(2);
+  });
+
   it('locks: the crowd sets the clock', () => {
     expect(buildAll({ ...FULL, crowd: 'kids' }).locks?.tuning.secondsTotal).toBe(420);
     expect(buildAll({ ...FULL, crowd: 'adults' }).locks?.tuning.secondsTotal).toBe(240);

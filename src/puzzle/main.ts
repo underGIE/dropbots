@@ -26,6 +26,9 @@ let draftName = '';
 let picks: Record<string, string> = {};
 
 const id = () => Math.random().toString(36).slice(2, 9);
+// facts and names arrive from a link now: everything printed is escaped,
+// and options are picked by index rather than by their text
+const esc = (t: string) => t.replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
 const code = () => Math.random().toString(36).slice(2, 6).toUpperCase();
 
 function enter(roomCode: string, isHost: boolean): void {
@@ -66,7 +69,7 @@ function lobby(r: LocksRoom): string {
     </div>
     <div class="card">
       <div class="sub">בחדר (${r.seats.length})</div>
-      <div class="names">${r.seats.map((s) => s.name).join(' · ')}</div>
+      <div class="names">${r.seats.map((s) => esc(s.name)).join(' · ')}</div>
       ${r.seats.length < 2 ? '<div class="sub">צריך לפחות שניים — אחד מחזיק מנעול, השני מחזיק תשובה.</div>' : ''}
       <button class="primary" id="start">התחילו</button>
       ${r.error ? `<div class="err">${r.error}</div>` : ''}
@@ -108,10 +111,10 @@ function live(r: LocksRoom): string {
         .map(
           (q, i) => `
         <div class="card">
-          <div class="big" style="font-size:17px">${q.prompt}</div>
+          <div class="big" style="font-size:17px">${esc(q.prompt)}</div>
           <div class="chips" style="margin-top:10px">
             ${q.options
-              .map((o) => `<button class="chip ${picks[String(i)] === o ? 'on' : ''}" data-q="${i}" data-o="${o}">${o}</button>`)
+              .map((o, k) => `<button class="chip ${picks[String(i)] === o ? 'on' : ''}" data-q="${i}" data-k="${k}">${esc(o)}</button>`)
               .join('')}
           </div>
         </div>`,
@@ -125,7 +128,7 @@ function live(r: LocksRoom): string {
   if (view.role === 'clue') {
     return `
       ${head(r)}
-      <div class="card"><div class="big">המנעול אצל ${holderName}</div>
+      <div class="card"><div class="big">המנעול אצל ${esc(holderName)}</div>
       <div class="sub">התשובה אצלך. תגיד אותה בקול — אל תראה את המסך.</div></div>
       ${clueCards(view.clues)}
     `;
@@ -134,7 +137,7 @@ function live(r: LocksRoom): string {
   return `
     ${head(r)}
     <div class="card" style="text-align:center">
-      <div class="big">המנעול אצל ${holderName}</div>
+      <div class="big">המנעול אצל ${esc(holderName)}</div>
       <div class="sub">הסיבוב הזה אתה נושם. תעזור להם להסכים.</div>
     </div>
   `;
@@ -145,8 +148,8 @@ function clueCards(clues: { prompt: string; answer: string }[]): string {
     .map(
       (c) => `
     <div class="card" style="text-align:center">
-      <div class="sub">${c.prompt}</div>
-      <div class="shout" style="margin-top:8px">${c.answer}</div>
+      <div class="sub">${esc(c.prompt)}</div>
+      <div class="shout" style="margin-top:8px">${esc(c.answer)}</div>
     </div>`,
     )
     .join('');
@@ -216,7 +219,13 @@ function wireRoom(): void {
   });
   for (const chip of app.querySelectorAll<HTMLButtonElement>('[data-q]')) {
     chip.addEventListener('click', () => {
-      picks = { ...picks, [chip.dataset.q!]: chip.dataset.o! };
+      const s = room?.state;
+      const lock = s ? currentLock(s) : null;
+      const option = lock?.questions[Number(chip.dataset.q)]?.options[Number(chip.dataset.k)];
+      if (option === undefined) {
+        return;
+      }
+      picks = { ...picks, [chip.dataset.q!]: option };
       render();
     });
   }

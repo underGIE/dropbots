@@ -56,7 +56,9 @@ function buildLocks(order: Order) {
 
   const secondsTotal = order.crowd === 'kids' ? 420 : order.crowd === 'adults' ? 240 : 300;
   const lockCount = unique.length >= 12 ? 6 : unique.length >= 10 ? 5 : 4;
-  const tuning: PuzzleTuning = { ...DEFAULT_PUZZLE_TUNING, locks: lockCount, secondsTotal };
+  // two phones means one holds the lock and one holds the clue: one clue per lock
+  const cluesPerLock = Math.max(1, Math.min(2, order.players - 1));
+  const tuning: PuzzleTuning = { ...DEFAULT_PUZZLE_TUNING, locks: lockCount, cluesPerLock, secondsTotal };
 
   const missing: string[] = [];
   if (unique.length < MIN_FACTS) {
