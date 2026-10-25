@@ -1,6 +1,6 @@
 import demoFacts from './demo-facts.json';
 import { currentLock, viewFor } from './locks';
-import { LocksRoom } from './net';
+import { LocksRoom, type LocksMsg } from './net';
 import type { Fact } from './types';
 import { broadcastTransport } from '../transport/broadcast';
 
@@ -16,7 +16,7 @@ const code = () => Math.random().toString(36).slice(2, 6).toUpperCase();
 
 function enter(roomCode: string, isHost: boolean): void {
   room = new LocksRoom({
-    transport: broadcastTransport(roomCode),
+    transport: broadcastTransport<LocksMsg>(roomCode),
     facts: FACTS,
     me: { id: id(), name: draftName.trim() || 'אורח' },
     isHost,

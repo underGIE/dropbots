@@ -1,11 +1,11 @@
 import type { GameMsg, Transport } from './types';
 
 /** In-process loopback bus, for tests and solo play. */
-export function localBus(): { make: () => Transport } {
-  const handlers = new Set<(msg: GameMsg) => void>();
+export function localBus<M = GameMsg>(): { make: () => Transport<M> } {
+  const handlers = new Set<(msg: M) => void>();
   return {
     make: () => {
-      let mine: ((msg: GameMsg) => void) | null = null;
+      let mine: ((msg: M) => void) | null = null;
       return {
         send(msg) {
           for (const h of handlers) {

@@ -1,6 +1,6 @@
 import { broadcastTransport } from './broadcast';
 import { clientFromEnv, supabaseTransport, type RealtimeLike } from './supabase';
-import type { Transport } from './types';
+import type { GameMsg, Transport } from './types';
 
 /**
  * With Supabase keys a room spans real phones; without them it still plays
@@ -9,13 +9,15 @@ import type { Transport } from './types';
  */
 export function selectTransport(env: Record<string, string | undefined>): {
   online: boolean;
-  makeTransport: (code: string) => Transport;
+  makeTransport: <M = GameMsg>(code: string) => Transport<M>;
 } {
   const realtime = clientFromEnv(env);
   const online = realtime !== null;
   return {
     online,
-    makeTransport: (code) =>
-      online ? supabaseTransport(code, realtime as unknown as RealtimeLike) : broadcastTransport(code),
+    makeTransport: <M = GameMsg>(code: string): Transport<M> =>
+      online
+        ? supabaseTransport<M>(code, realtime as unknown as RealtimeLike)
+        : broadcastTransport<M>(code),
   };
 }

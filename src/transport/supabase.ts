@@ -43,17 +43,17 @@ export function clientFromEnv(env: Record<string, string | undefined>): Supabase
  * Nothing is written to the database — the match lives in the host's memory,
  * exactly as it does over BroadcastChannel.
  */
-export function supabaseTransport(room: string, client: RealtimeLike): Transport {
-  let handler: ((msg: GameMsg) => void) | null = null;
+export function supabaseTransport<M = GameMsg>(room: string, client: RealtimeLike): Transport<M> {
+  let handler: ((msg: M) => void) | null = null;
   let ready = false;
-  const outbox: GameMsg[] = [];
+  const outbox: M[] = [];
 
   const channel = client.channel(`twodjs:${room}`, {
     config: { broadcast: { self: false, ack: false } },
   });
 
   channel.on('broadcast', { event: EVENT }, (payload) => {
-    const body = (payload as { payload?: GameMsg }).payload;
+    const body = (payload as { payload?: M }).payload;
     if (body && handler) {
       handler(body);
     }

@@ -7,8 +7,13 @@ export type GameMsg =
   | { t: 'again' }
   | { t: 'state'; hostId: string; state: MatchState };
 
-export interface Transport {
-  send(msg: GameMsg): void;
-  onMessage(cb: (msg: GameMsg) => void): void;
+/**
+ * One room, one message type. Every engine brings its own union (DROPBOTS'
+ * `GameMsg` is the default, the duel and the locks bring theirs); the wire is
+ * the same BroadcastChannel or Supabase channel underneath.
+ */
+export interface Transport<M = GameMsg> {
+  send(msg: M): void;
+  onMessage(cb: (msg: M) => void): void;
   close(): void;
 }

@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import facts from '../src/puzzle/demo-facts.json';
 import { viewFor } from '../src/puzzle/locks';
-import { LocksRoom } from '../src/puzzle/net';
+import { LocksRoom, type LocksMsg } from '../src/puzzle/net';
 import type { Fact } from '../src/puzzle/types';
 import { localBus } from '../src/transport/local';
 
 const FACTS = facts as Fact[];
 
 function table() {
-  const bus = localBus();
+  const bus = localBus<LocksMsg>();
   let clock = 1_000_000;
   const now = () => clock;
   const mk = (id: string, name: string, isHost: boolean) =>
@@ -70,7 +70,7 @@ describe('three phones around the locks', () => {
   });
 
   it('refuses a table the content cannot seat', () => {
-    const bus = localBus();
+    const bus = localBus<LocksMsg>();
     const thin = FACTS.slice(0, 4);
     const host = new LocksRoom({ transport: bus.make(), facts: thin, me: { id: 'h', name: 'אבי' }, isHost: true, autoTick: false });
     new LocksRoom({ transport: bus.make(), facts: thin, me: { id: 'g', name: 'שני' }, isHost: false, autoTick: false });

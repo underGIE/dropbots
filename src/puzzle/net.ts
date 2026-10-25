@@ -1,4 +1,4 @@
-import type { GameMsg, Transport } from '../transport/types';
+import type { Transport } from '../transport/types';
 import { createPuzzle, startPuzzle, submitLock, tickPuzzle, validateFacts } from './locks';
 import type { Fact, PuzzleState, PuzzleTuning } from './types';
 import { DEFAULT_PUZZLE_TUNING } from './locks';
@@ -32,9 +32,7 @@ export class LocksRoom {
   error: string | null = null;
   onChange: (() => void) | null = null;
 
-  // the transport is typed for DROPBOTS' messages; until it is made generic
-  // (one change, after the parallel work lands) this room adapts at the edge
-  private readonly transport: { send(m: LocksMsg): void; onMessage(cb: (m: LocksMsg) => void): void; close(): void };
+  private readonly transport: Transport<LocksMsg>;
   private readonly facts: Fact[];
   private readonly tuning: PuzzleTuning;
   private readonly now: () => number;
@@ -42,7 +40,7 @@ export class LocksRoom {
   private lastSignature = '';
 
   constructor(opts: {
-    transport: Transport;
+    transport: Transport<LocksMsg>;
     facts: Fact[];
     me: Seat;
     isHost: boolean;
@@ -50,12 +48,7 @@ export class LocksRoom {
     now?: () => number;
     autoTick?: boolean;
   }) {
-    const raw = opts.transport;
-    this.transport = {
-      send: (m) => raw.send(m as unknown as GameMsg),
-      onMessage: (cb) => raw.onMessage((m) => cb(m as unknown as LocksMsg)),
-      close: () => raw.close(),
-    };
+    this.transport = opts.transport;
     this.facts = opts.facts;
     this.tuning = opts.tuning ?? DEFAULT_PUZZLE_TUNING;
     this.me = opts.me;
